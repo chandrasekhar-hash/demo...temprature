@@ -1,94 +1,93 @@
-# Smart Climate Monitoring Dashboard
+# 🌡️ Temperature & Humidity Management System
 
-## Overview
-
-This project is a React.js-based dashboard for monitoring temperature and humidity across multiple locations. It provides a clear and interactive interface with real-time updates and data visualization.
-
-The application is designed with a component-based architecture and focuses on simplicity, scalability, and clean UI design.
+A full-stack temperature monitoring system split into clear, modular components for seamless multi-developer collaboration.
 
 ---
 
-## Features
+## 📁 Project Architecture & Directory Division
 
-* Time-based dynamic background (dawn, day, dusk, night)
-* Live clock updated in real time
-* Temperature and humidity display for multiple locations
-* Conditional styling based on temperature levels
-* 24-hour temperature trend visualization using charts
-* Daily minimum and maximum temperature insights
-* Automatic calculation of average temperature and humidity
-
----
-
-## Tech Stack
-
-* **Frontend:** React for building a component-based user interface
-* **UI Library:** Ant Design for responsive layout and pre-built components
-* **Charts:** Chart.js integrated using react-chartjs-2 for data visualization
-* **Styling:** Custom CSS for animations, layout, and glassmorphism design
-* **Data Handling:** JavaScript with API-ready structure for future backend integration
-
----
-
-## Project Structure
-
-```bash
-src/
-├── components/
-│   ├── Background.jsx
-│   ├── Header.jsx
-│   ├── HeroStats.jsx
-│   ├── LocationsGrid.jsx
-│   ├── LocationCard.jsx
-│   ├── MinMaxSection.jsx
-│   ├── HistoryChart.jsx
-│   └── Footer.jsx
+```
+Temprature Management System/
+├── 🗄️ database/                  --> Database Schemas & Seed Data
+│   ├── setup.sql                --> PostgreSQL tables initialization
+│   ├── seed.js                  --> Sample data generator script
+│   └── db_config.json           --> Database metadata & configuration
 │
-├── data/
-│   └── locations.js
+├── ⚙️ backend/                   --> Node.js & Express API Server
+│   ├── server.js                --> Express server entrypoint
+│   ├── package.json             --> Backend npm packages & scripts
+│   ├── .env                     --> Database & server environment configuration
+│   ├── config/
+│   │   └── db.js                --> PostgreSQL connection pool
+│   ├── controllers/
+│   │   ├── locationController.js--> Location API handlers
+│   │   └── readingController.js --> Sensor reading API handlers
+│   └── routes/
+│       ├── locationRoutes.js    --> Location routes (/api/locations)
+│       └── readingRoutes.js     --> Reading routes (/api/readings)
 │
-├── utils/
-│   ├── calculations.js
-│   ├── timeUtils.js
-│   └── chartUtils.js
-│
-├── styles/
-│   └── global.css
-│
-├── App.jsx
-└── main.jsx
+└── 🎨 frontend/                  --> React + Vite User Interface
+    ├── package.json             --> Frontend dependencies
+    ├── vite.config.js           --> Vite bundler configuration
+    ├── index.html               --> HTML entrypoint
+    └── src/
+        ├── main.jsx             --> React root rendering
+        ├── App.jsx              --> Main Dashboard orchestrator
+        ├── services/
+        │   └── apiService.js    --> Backend API integration service
+        ├── data/
+        │   └── initialLocations.js --> Static fallback location data
+        ├── utils/
+        │   └── helpers.js       --> Time, theme, chart & calculation helpers
+        ├── styles/
+        │   └── main.css         --> Dashboard CSS design system
+        └── components/
+            ├── Background.jsx   --> Dynamic sky theme background
+            ├── Header.jsx       --> Navbar with live IST clock
+            ├── HeroStats.jsx    --> Campus live average hero section
+            ├── LocationsGrid.jsx--> Grid layout for sensor cards
+            ├── LocationCard.jsx --> Individual location live card
+            ├── MinMaxSection.jsx--> Daily min & max record badges
+            ├── HistoryChart.jsx --> 24h temperature trend chart
+            └── Footer.jsx       --> Dashboard footer
 ```
 
 ---
 
-## Installation
+## 👥 4-Developer Group Task Division
 
+| Developer | Assigned Folder / Files | Responsibility |
+| :--- | :--- | :--- |
+| **Developer 1 (Database Lead)** | `database/setup.sql`<br>`database/seed.js`<br>`database/db_config.json`<br>`backend/config/db.js` | Database setup, schema design, seeding initial data, and connection pool management. |
+| **Developer 2 (Backend API Dev)** | `backend/server.js`<br>`backend/controllers/*`<br>`backend/routes/*` | Writing Express server endpoints, route controllers, and handling API requests. |
+| **Developer 3 (Frontend Core & State)** | `frontend/src/App.jsx`<br>`frontend/src/services/apiService.js`<br>`frontend/src/utils/helpers.js`<br>`frontend/src/data/*` | State management, live clock updates, background state calculations, and API integration. |
+| **Developer 4 (Frontend UI Components)** | `frontend/src/components/*`<br>`frontend/src/styles/main.css` | Building UI components (Header, HeroStats, LocationsGrid, HistoryChart, Footer) & styling. |
+
+---
+
+## 🚀 How to Run the Project
+
+### 1. Database Setup
 ```bash
-git clone <your-repo-link>
-cd climate-dashboard
+# Initialize PostgreSQL schema
+psql -U postgres -d temperature_db -f database/setup.sql
+
+# Seed initial data
+node database/seed.js
+```
+
+### 2. Start Backend Server
+```bash
+cd backend
 npm install
 npm run dev
+# Server will run on http://localhost:3000
 ```
 
----
-
-## Notes
-
-* The UI is built using custom CSS and integrated with Ant Design components.
-* Data structure is prepared for backend or API integration.
-* Random data used for charts and statistics is stable per page load.
-
----
-
-## Future Improvements
-
-* Integration with real-time data sources
-* Backend support for persistent data
-* User authentication and role-based access
-* Improved analytics and reporting features
-
----
-
-## Summary
-
-This project demonstrates the ability to build a structured, maintainable, and interactive frontend dashboard using modern React practices.
+### 3. Start Frontend App
+```bash
+cd frontend
+npm install
+npm run dev
+# Vite server will run on http://localhost:5173
+```
