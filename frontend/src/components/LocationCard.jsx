@@ -1,14 +1,15 @@
 import React from 'react';
+import { getLocationStatus } from '../utils/locationHelpers';
 
 function LocationCard({ name, temp, humidity }) {
-  const isOptimal = temp <= 25;
+  const { status, badgeClass } = getLocationStatus(temp);
 
   return (
     <div className="location-card glass-card">
       <div className="card-header">
         <h3 className="location-name">{name}</h3>
-        <span className={`status-badge ${isOptimal ? 'badge-optimal' : 'badge-warm'}`}>
-          {isOptimal ? 'Optimal' : 'Warm'}
+        <span className={`status-badge ${badgeClass}`}>
+          {status}
         </span>
       </div>
 

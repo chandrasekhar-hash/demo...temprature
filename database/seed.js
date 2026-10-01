@@ -1,10 +1,11 @@
 // ============================================================
-// seed.js  —  Populates initial database data
+// seed.js  —  Person 4: Master Database Seed Runner
 // ============================================================
-// Run: node database/seed.js
+// Runs full seed suite for initial locations & analytics
 // ============================================================
 
 const pool = require('../backend/config/db');
+const seedAnalytics = require('./03_analytics_seed');
 
 const initialLocations = [
   { id: 'esp32_1', name: 'Main Library', temp: 23.5, humidity: 52 },
@@ -16,41 +17,26 @@ const initialLocations = [
 
 async function seedDatabase() {
   try {
-    console.log('🌱 Starting database seeding...');
+    console.log('🌱 Starting master database seed routine...');
 
-    // Clear existing data
     await pool.query('DELETE FROM readings;');
     await pool.query('DELETE FROM locations;');
 
-    // Insert locations
     for (const loc of initialLocations) {
       await pool.query(
         `INSERT INTO locations (id, name, temp, humidity, last_updated)
          VALUES ($1, $2, $3, $4, NOW())`,
         [loc.id, loc.name, loc.temp, loc.humidity]
       );
-
-      // Insert 5 historical readings for each location
-      for (let i = 5; i >= 1; i--) {
-        const tempVariation = (Math.random() * 2 - 1).toFixed(1);
-        const humidityVariation = Math.floor(Math.random() * 6 - 3);
-
-        await pool.query(
-          `INSERT INTO readings (esp_id, temp, humidity, recorded_at)
-           VALUES ($1, $2, $3, NOW() - INTERVAL '${i * 30} minutes')`,
-          [
-            loc.id,
-            (loc.temp + parseFloat(tempVariation)).toFixed(1),
-            loc.humidity + humidityVariation
-          ]
-        );
-      }
     }
 
-    console.log('✅ Database successfully seeded!');
+    console.log('✅ Base locations seeded!');
+    await seedAnalytics();
+
+    console.log('🎉 Full database seeding finished!');
     process.exit(0);
   } catch (err) {
-    console.error('❌ Seeding failed:', err);
+    console.error('❌ Seeding error:', err);
     process.exit(1);
   }
 }

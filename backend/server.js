@@ -1,13 +1,15 @@
 // ============================================================
-// server.js  —  Express Server Entrypoint
+// server.js  —  Person 4: Core Backend Server Infrastructure
 // ============================================================
 
 const express = require('express');
 const cors    = require('cors');
 require('dotenv').config();
 
-const locationRoutes = require('./routes/locationRoutes');
-const readingRoutes  = require('./routes/readingRoutes');
+// Route Imports from Teammates
+const locationRoutes  = require('./routes/locationRoutes');   // Person 1
+const readingRoutes   = require('./routes/readingRoutes');    // Person 2
+const analyticsRoutes = require('./routes/analyticsRoutes');  // Person 3
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -16,9 +18,10 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Routes
+// Register API Routes
 app.use('/api/locations', locationRoutes);
 app.use('/api/readings', readingRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Health check endpoint
 app.get('/', (req, res) => {
@@ -27,9 +30,10 @@ app.get('/', (req, res) => {
 
 // Start listening
 app.listen(PORT, () => {
-  console.log(`\n🚀 Server listening at http://localhost:${PORT}`);
+  console.log(`\n🚀 Express Server listening at http://localhost:${PORT}`);
   console.log(`Available Endpoints:`);
-  console.log(`  GET  /api/locations`);
-  console.log(`  POST /api/readings`);
-  console.log(`  GET  /api/readings/history/:espId\n`);
+  console.log(`  GET  /api/locations          (Person 1: Location Feature)`);
+  console.log(`  POST /api/readings           (Person 2: Sensor Ingestion)`);
+  console.log(`  GET  /api/readings/history   (Person 2: Sensor History)`);
+  console.log(`  GET  /api/analytics/trends   (Person 3: Trend Analytics)\n`);
 });
